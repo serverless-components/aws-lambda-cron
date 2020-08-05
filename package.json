@@ -1,0 +1,11 @@
+{
+  "name": "lambda-cron",
+  "version": "0.1.1",
+  "description": "Lambda Cron using Serverless Components",
+  "main": "serverless.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AJ Stuyvenberg",
+  "license": "ISC"
+}
