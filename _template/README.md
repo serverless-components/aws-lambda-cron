@@ -2,7 +2,7 @@
 
 This Serverless Framework Component is a ready-to-go Lambda function that runs on whatever schedule you want!
 
-Full README is available in the repo [here](https://github.com/astuyve/aws-lambda-cron)
+Full README is available in the repo [here](https://github.com/serverless-components/aws-lambda-cron)
 
 # Quick Start
 

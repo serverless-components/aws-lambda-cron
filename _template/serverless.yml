@@ -3,7 +3,7 @@ org: serverlessinc
 name: aws-lambda-cron-template
 description: Deploys a scheduled Lambda
 keywords: aws, serverless, lambda, cron
-repo: https://github.com/astuyve/aws-lambda-cron
+repo: https://github.com/serverless-components/aws-lambda-cron
 license: MIT
 author: Aaron Stuyvenberg
 inputs:
