@@ -13,24 +13,26 @@ class LambdaCron extends Component {
         "Input 'schedule' is required. Please see README: https://git.io/JJWW0"
       );
     }
-    const { schedule }=inputs.schedule
+    const { schedule } = inputs.schedule;
 
-    let valid = false
+    let valid = false;
 
     // Check for a cron expression
-    let pat = /(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})/
-    if (pat.test(schedule)) {
+    const cronRegex = /^((((\d+,)+\d+|(\d+(\/|-|#)\d+)|\d+L?|\*(\/\d+)?|L(-\d+)?|\?|[A-Z]{3}(-[A-Z]{3})?) ?){5,7})$/;
+    if (cronRegex.test(schedule)) {
       valid = true;
     }
 
     // Check for a rate expression
-    pat = /rate(\d+\s+(minute|minutes|hour|hours|day|days))/
-    if (pat.test(schedule)) {
-      valid = true
+    const rateRegex = /rate(\d+\s+(minute|minutes|hour|hours|day|days))/;
+    if (rateRegex.test(schedule)) {
+      valid = true;
     }
 
-    if(!valid) {
-      console.error("Schedule string is possibly wrong. Please recheck it.")
+    if (!valid) {
+      throw new Error(
+        "Schedule expression is invalid. Please recheck it."
+      );
     }
   }
   async deploy(inputs = {}) {
