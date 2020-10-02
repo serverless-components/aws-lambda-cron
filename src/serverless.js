@@ -7,17 +7,41 @@ const fs = require("fs");
 const { createOrUpdateMetaRole } = require("./utils");
 
 class LambdaCron extends Component {
-  async deploy(inputs = {}) {
-    if (Object.keys(this.credentials.aws).length === 0) {
-      const msg = `Credentials not found. Make sure you have a .env file in the cwd. - Docs: https://git.io/JvArp`;
-      throw new Error(msg);
-    }
-
+  validate(inputs) {
     if (!inputs.schedule) {
       throw new Error(
         "Input 'schedule' is required. Please see README: https://git.io/JJWW0"
       );
     }
+    const { schedule } = inputs.schedule;
+
+    let valid = false;
+
+    // Check for a cron expression
+    const cronRegex = /^cron\(((((\d+,)+\d+|(\d+(\/|-|#)\d+)|\d+L?|\*(\/\d+)?|L(-\d+)?|\?|[A-Z]{3}(-[A-Z]{3})?) ?){5,7})\)$/;
+    if (cronRegex.test(schedule)) {
+      valid = true;
+    }
+
+    // Check for a rate expression
+    const rateRegex = /rate(\d+\s+(minute|minutes|hour|hours|day|days))/;
+    if (rateRegex.test(schedule)) {
+      valid = true;
+    }
+
+    if (!valid) {
+      throw new Error(
+        "Schedule expression is invalid. Please recheck it."
+      );
+    }
+  }
+  async deploy(inputs = {}) {
+    if (Object.keys(this.credentials.aws).length === 0) {
+      const msg = `Credentials not found. Make sure you have a .env file in the cwd. - Docs: https://git.io/JvArp`;
+      throw new Error(msg);
+    }
+    this.validate(inputs)
+
     const region = inputs.region || "us-east-1";
     inputs.name = inputs.name || this.name;
 
