@@ -18,7 +18,7 @@ class LambdaCron extends Component {
     let valid = false;
 
     // Check for a cron expression
-    const cronRegex = /^((((\d+,)+\d+|(\d+(\/|-|#)\d+)|\d+L?|\*(\/\d+)?|L(-\d+)?|\?|[A-Z]{3}(-[A-Z]{3})?) ?){5,7})$/;
+    const cronRegex = /^cron\(((((\d+,)+\d+|(\d+(\/|-|#)\d+)|\d+L?|\*(\/\d+)?|L(-\d+)?|\?|[A-Z]{3}(-[A-Z]{3})?) ?){5,7})\)$/;
     if (cronRegex.test(schedule)) {
       valid = true;
     }
