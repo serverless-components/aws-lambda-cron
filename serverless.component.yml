@@ -1,6 +1,6 @@
-name: aws-lambda-cron
-version: 0.1.1
-org: serverlessinc
+name: aws-lambda-cron-with-role-name
+version: 0.0.1
+org: zenstyle
 keywords: aws, serverless, cron
-author: AJ Stuyvenberg
+author: AJ Stuyvenber, Hirotaka Mizutani
 src: ./src
