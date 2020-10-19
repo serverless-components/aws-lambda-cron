@@ -1,0 +1,6 @@
+name: aws-lambda-cron-starter
+org: serverlessinc
+description: Deploys a scheduled Lambda
+keywords: aws, serverless, lambda, cron
+repo: https://github.com/serverless-components/aws-lambda-cron
+license: MIT
