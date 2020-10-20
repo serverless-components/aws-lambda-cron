@@ -1,0 +1,7 @@
+component: aws-lambda-cron
+org: serverlessinc
+name: aws-lambda-cron-starter
+
+inputs:
+  src: ./src/
+  schedule: rate(1 minute)

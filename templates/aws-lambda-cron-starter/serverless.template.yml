@@ -1,11 +1,6 @@
-component: aws-lambda-cron
+name: aws-lambda-cron-starter
 org: serverlessinc
-name: aws-lambda-cron-template
 description: Deploys a scheduled Lambda
 keywords: aws, serverless, lambda, cron
 repo: https://github.com/serverless-components/aws-lambda-cron
 license: MIT
-author: Aaron Stuyvenberg
-inputs:
-  src: ./src/
-  schedule: rate(1 minute)
