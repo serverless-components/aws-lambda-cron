@@ -13,7 +13,7 @@ class LambdaCron extends Component {
         "Input 'schedule' is required. Please see README: https://git.io/JJWW0"
       );
     }
-    const { schedule } = inputs.schedule;
+    const { schedule } = inputs;
 
     let valid = false;
 
@@ -24,7 +24,7 @@ class LambdaCron extends Component {
     }
 
     // Check for a rate expression
-    const rateRegex = /rate(\d+\s+(minute|minutes|hour|hours|day|days))/;
+    const rateRegex = /rate\(\d+\s+(minute|minutes|hour|hours|day|days)\)/;
     if (rateRegex.test(schedule)) {
       valid = true;
     }
