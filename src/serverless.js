@@ -83,6 +83,7 @@ class LambdaCron extends Component {
       memory: inputs.memory || 512,
       timeout: inputs.timeout || 60,
       env: inputs.env,
+      layers: inputs.layers || []
     };
 
     const { lambdaArn, lambdaSize, lambdaSha } = await extras.deployLambda(
