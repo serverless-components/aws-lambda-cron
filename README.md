@@ -104,6 +104,13 @@ inputs:
   layers:                        # (optional) lambda layers to add to this lambda function. default is an empty array.
     - aws:layer:arn:1
     - aws:layer:arn:2
+  vpc:                           # (optional) vpc configuration to apply on the lambda function.
+    securityGroupIds:
+      - abc
+      - xyz
+    subnetIds:
+      - abc
+      - xyz
 ```
 
 # CLI Reference
