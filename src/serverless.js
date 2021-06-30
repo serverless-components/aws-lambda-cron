@@ -53,29 +53,48 @@ class LambdaCron extends Component {
       region,
     });
 
-    const roleParams = {
-      roleName: `${inputs.name}-role`,
-      service: "lambda.amazonaws.com",
-      policy: [
-        {
-          Effect: "Allow",
-          Action: ["sts:AssumeRole"],
-          Resource: "*",
-        },
-        {
-          Effect: "Allow",
-          Action: [
-            "logs:CreateLogGroup",
-            "logs:CreateLogStream",
-            "logs:PutLogEvents",
-          ],
-          Resource: "*",
-        },
-      ],
-    };
-    const { roleArn } = await extras.deployRole(roleParams);
-    this.state.roleName = roleParams.roleName;
+    let roleArn
+    if (inputs.roleName) {
+      console.log(
+        `Verifying the provided IAM Role with the name: ${inputs.roleName} in the inputs exists...`
+      );
 
+      const userRole = await extras.getRole({ roleName: inputs.roleName });
+      const userRoleArn = userRole && userRole.Role && userRole.Role.Arn ? userRole.Role.Arn : null; // Don't save user provided role to state, always reference it as an input, in case it changes
+
+      // If user role exists, save it to state so it can be used for the create/update lambda logic later
+      if (userRoleArn) {
+        console.log(`The provided IAM Role with the name: ${inputs.roleName} in the inputs exists.`);
+        roleArn = userRoleArn;
+      } else {
+        throw new Error(
+          `The provided IAM Role with the name: ${inputs.roleName} could not be found.`
+        );
+      }
+    } else {
+      const roleParams = {
+        roleName: `${inputs.name}-role`,
+        service: "lambda.amazonaws.com",
+        policy: [
+          {
+            Effect: "Allow",
+            Action: ["sts:AssumeRole"],
+            Resource: "*",
+          },
+          {
+            Effect: "Allow",
+            Action: [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents",
+            ],
+            Resource: "*",
+          },
+        ],
+      };
+      roleArn = await extras.deployRole(roleParams).roleArn;
+      this.state.roleName = roleParams.roleName;
+    }
     const lambdaParams = {
       lambdaName: `${inputs.name}-lambda`, // required
       roleArn,
@@ -136,7 +155,9 @@ class LambdaCron extends Component {
     const response = await cwEvents.putTargets(targetParams).promise();
     this.state.targetId = targetParams.Targets.Id;
 
-    await createOrUpdateMetaRole(this, inputs, extras, this.accountId);
+    if (!inputs.roleName) {
+      await createOrUpdateMetaRole(this, inputs, extras, this.accountId);
+    }
   }
   async remove() {
     if (Object.keys(this.credentials.aws).length === 0) {
@@ -151,7 +172,11 @@ class LambdaCron extends Component {
     });
 
     console.log("removing execution role");
-    await extras.removeRole({ roleName: this.state.roleName });
+    if (this.state.roleName) {
+      await extras.removeRole({ roleName: this.state.roleName });
+    } else {
+      console.log("execution meta role does not exist");
+    }
     console.log("removing meta role");
     await extras.removeRole({ roleName: this.state.metaRoleName });
     await extras.removeLambda({ lambdaName: this.state.lambdaName });
