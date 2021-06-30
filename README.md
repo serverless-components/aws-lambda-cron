@@ -102,7 +102,9 @@ inputs:
     FOO: 'bar'
   region: us-east-2              # (optional) aws region to deploy to. default is us-east-1.
   roleName: my-custom-role-name  # (optional) custom AWS IAM Role name for setting custom permissions.
-```
+  layers:                        # (optional) lambda layers to add to this lambda function. default is an empty array.
+    - aws:layer:arn:1
+    - aws:layer:arn:2
 
 # CLI Reference
 
