@@ -64,15 +64,12 @@ const createOrUpdateMetaRole = async (
 const getVpcConfig = (vpcConfig) => {
   if (vpcConfig == null) {
     return {
-      SecurityGroupIds: [],
-      SubnetIds: [],
+      securityGroupIds: [],
+      subnetIds: [],
     };
   }
 
-  return {
-    SecurityGroupIds: vpcConfig.securityGroupIds,
-    SubnetIds: vpcConfig.subnetIds,
-  };
+  return vpcConfig;
 };
 
 module.exports = {
